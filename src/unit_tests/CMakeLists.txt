@@ -29,6 +29,12 @@ if(NOT WAZUHLIB)
   message(FATAL_ERROR "libwazuh.a not found in ${SRC_FOLDER} Aborting...")
 endif()
 
+find_library(WAZUHFIMEBPF NAMES libfimebpf.so HINTS "${SRC_FOLDER}/syscheckd/build/lib/")
+
+if(NOT WAZUHFIMEBPF)
+    message(FATAL_ERROR "libfimebpf.so not found! Aborting...")
+endif()
+
 # Enable testing
 enable_testing()
 

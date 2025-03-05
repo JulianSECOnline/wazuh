@@ -161,9 +161,15 @@ int initialize_bpf_object(ring_buffer** rb, ring_buffer_sample_fn sample_cb) {
         free(bpf_helpers);
         bpf_helpers = NULL;
     }
-    obj = bpf_helpers->bpf_object_open_file(bpfobj_path, nullptr);
+
+    if (bpf_helpers != NULL) {
+        obj = bpf_helpers->bpf_object_open_file(bpfobj_path, nullptr);
+    } else {
+        logFn(LOG_ERROR,"Error: bpf_helpers is NULL");
+    }
+
     if (!obj) {
-        char error_message[1024];
+        char error_message[PATH_MAX];
         snprintf(error_message, sizeof(error_message), FIM_ERROR_EBPF_OBJ_OPEN, bpfobj_path);
         logFn(LOG_ERROR, error_message);
         w_bpf_deinit(bpf_helpers);
